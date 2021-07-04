@@ -12,6 +12,11 @@ namespace Sabresaurus.RemoteActions.Requests
         {
             this.message = message;
         }
+        
+        public ExampleRequest()
+        {
+            this.message = "Hello";
+        }
 
         public ExampleRequest(BinaryReader br)
         {

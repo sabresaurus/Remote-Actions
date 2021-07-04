@@ -2,8 +2,6 @@
 
 namespace Sabresaurus.RemoteActions
 {
-    public enum InspectionConnection : byte { LocalEditor, RemotePlayer }
-
     /// <summary>
     /// Required for RemoteActions to connect to a remote. This class is included in builds and auto-instantiates
     /// when the game starts.
@@ -36,8 +34,7 @@ namespace Sabresaurus.RemoteActions
 
         byte[] OnRequestReceived(byte[] request)
         {
-            byte[] response = RequestProcessor.Process(request);
-            return response;
+            return RequestProcessor.Process(request);
         }
     }
 }

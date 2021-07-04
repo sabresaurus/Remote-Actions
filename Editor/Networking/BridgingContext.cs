@@ -9,24 +9,9 @@ namespace Sabresaurus.RemoteActions
         [System.Serializable]
         public class Container
         {
-            RemoteActionsSettings networkSettings = new RemoteActionsSettings();
-            APIManager apiManager = new APIManager();
+            public APIManager APIManager { get; } = new APIManager();
 
-            public APIManager APIManager
-            {
-                get
-                {
-                    return apiManager;
-                }
-            }
-
-            public RemoteActionsSettings NetworkSettings
-            {
-                get
-                {
-                    return networkSettings;
-                }
-            }
+            public RemoteActionsSettings NetworkSettings { get; } = new RemoteActionsSettings();
         }
 
         #region Bridging

@@ -186,8 +186,7 @@ namespace Sabresaurus.RemoteActions
 
         public static void Tick()
         {
-
-            if (pendingClient != null)
+            if (pendingClient != null && pendingClient.Connected)
             {
                 var stream = pendingClient.GetStream();
                 if (stream.DataAvailable)

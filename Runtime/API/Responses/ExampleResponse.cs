@@ -20,9 +20,14 @@ namespace Sabresaurus.RemoteActions.Responses
         }
 
 
-		public override void Write(BinaryWriter bw)
-		{
+        public override void Write(BinaryWriter bw)
+        {
             bw.Write(message);
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(ExampleResponse)}\n{message}";
+        }
+    }
 }
