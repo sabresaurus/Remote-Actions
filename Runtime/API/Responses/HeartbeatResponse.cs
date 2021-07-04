@@ -2,7 +2,7 @@
 using System.Collections;
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Responses
+namespace Sabresaurus.RemoteActions.Responses
 {
     public class HeartbeatResponse : BaseResponse
     {

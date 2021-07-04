@@ -2,14 +2,14 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
     public class BridgingContext : ScriptableObject
     {
         [System.Serializable]
         public class Container
         {
-            SidekickNetworkSettings networkSettings = new SidekickNetworkSettings();
+            RemoteActionsSettings networkSettings = new RemoteActionsSettings();
             APIManager apiManager = new APIManager();
 
             public APIManager APIManager
@@ -20,7 +20,7 @@ namespace Sabresaurus.Sidekick
                 }
             }
 
-            public SidekickNetworkSettings NetworkSettings
+            public RemoteActionsSettings NetworkSettings
             {
                 get
                 {

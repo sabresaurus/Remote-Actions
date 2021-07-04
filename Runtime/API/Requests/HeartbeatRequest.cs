@@ -1,7 +1,7 @@
-﻿using Sabresaurus.Sidekick.Responses;
+﻿using Sabresaurus.RemoteActions.Responses;
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Requests
+namespace Sabresaurus.RemoteActions.Requests
 {
     /// <summary>
     /// Tells a connected client that we're still interested and they shouldn't

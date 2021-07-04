@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.IO;
-using Sabresaurus.Sidekick.Requests;
-using Sabresaurus.Sidekick.Responses;
+using Sabresaurus.RemoteActions.Requests;
+using Sabresaurus.RemoteActions.Responses;
 using System;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
-    public static class SidekickResponseProcessor
+    public static class ResponseProcessor
     {
         public static BaseResponse Process(byte[] input)
         {
@@ -33,7 +33,7 @@ namespace Sabresaurus.Sidekick
                         if (requestType.EndsWith("Request", StringComparison.InvariantCulture))
                         {
                             string responseType = requestType.Replace("Request", "Response");
-                            Type type = typeof(BaseResponse).Assembly.GetType("Sabresaurus.Sidekick.Responses." + responseType);
+                            Type type = typeof(BaseResponse).Assembly.GetType("Sabresaurus.RemoteActions.Responses." + responseType);
                             if (type != null && typeof(BaseResponse).IsAssignableFrom(type))
                             {
                                 BaseResponse response = (BaseResponse)Activator.CreateInstance(type, br, requestId);

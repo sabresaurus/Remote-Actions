@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Responses
+namespace Sabresaurus.RemoteActions.Responses
 {
     public class ExampleResponse : BaseResponse
     {

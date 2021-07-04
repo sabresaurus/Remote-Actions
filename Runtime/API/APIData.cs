@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.IO;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
 
     public abstract class APIData

@@ -1,15 +1,15 @@
 ﻿using Sabresaurus.EditorNetworking;
 using UnityEngine;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
     public enum InspectionConnection : byte { LocalEditor, RemotePlayer }
 
     /// <summary>
-    /// Required for Sidekick to connect to a remote. This class is included in builds and auto-instantiates
+    /// Required for RemoteActions to connect to a remote. This class is included in builds and auto-instantiates
     /// when the game starts.
     /// </summary>
-    public class RuntimeSidekickBridge : MonoBehaviour
+    public class RuntimeRemoteActionsBridge : MonoBehaviour
     {
         bool wasConnected;
 
@@ -18,8 +18,8 @@ namespace Sabresaurus.Sidekick
         {
             // Can't wrap the whole method - see https://stackoverflow.com/questions/44655667/
 #if DEVELOPMENT_BUILD && !UNITY_EDITOR
-            Debug.Log("Initializing Sidekick by auto-instantiating RuntimeSidekickBridge");
-            GameObject newGameObject = new GameObject("RuntimeSidekickBridge", typeof(RuntimeSidekickBridge));
+            Debug.Log($"Initializing Remote Actions by auto-instantiating {nameof(RuntimeRemoteActionsBridge)}");
+            GameObject newGameObject = new GameObject(nameof(RuntimeRemoteActionsBridge), typeof(RuntimeRemoteActionsBridge));
             DontDestroyOnLoad(newGameObject);
 #endif
         }
@@ -37,7 +37,7 @@ namespace Sabresaurus.Sidekick
 
         byte[] OnRequestReceived(byte[] request)
         {
-            byte[] response = SidekickRequestProcessor.Process(request);
+            byte[] response = RequestProcessor.Process(request);
             return response;
         }
     }

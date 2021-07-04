@@ -4,7 +4,7 @@ using Sabresaurus.EditorNetworking;
 using Sabresaurus.Sidekick.Requests;
 using Sabresaurus.Sidekick.Responses;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
     [System.Serializable]
     public class APIManager
@@ -16,7 +16,7 @@ namespace Sabresaurus.Sidekick
 
         public int SendToPlayers(BaseRequest request)
         {
-            SidekickNetworkSettings networkSettings = BridgingContext.Instance.container.NetworkSettings;
+            RemoteActionsSettings networkSettings = BridgingContext.Instance.container.NetworkSettings;
             lastRequestID++;
             if (networkSettings.InspectionConnection == InspectionConnection.LocalEditor)
             {

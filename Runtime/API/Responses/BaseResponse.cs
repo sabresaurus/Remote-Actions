@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Responses
+namespace Sabresaurus.RemoteActions.Responses
 {
     public abstract class BaseResponse
     {

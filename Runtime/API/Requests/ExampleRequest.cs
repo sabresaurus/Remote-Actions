@@ -1,8 +1,8 @@
 using UnityEngine;
-using Sabresaurus.Sidekick.Responses;
+using Sabresaurus.RemoteActions.Responses;
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Requests
+namespace Sabresaurus.RemoteActions.Requests
 {
     public class ExampleRequest : BaseRequest
     {

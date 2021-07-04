@@ -103,7 +103,7 @@ namespace Sabresaurus.EditorNetworking
             udpState.endPoint = endPoint;
             udpState.udpClient = udpClient;
 
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
             Debug.Log("Listening for player broadcasts");
 #endif
             udpClient.BeginReceive(new AsyncCallback(ReceivedBroadcastFromPlayer), udpState);
@@ -125,7 +125,7 @@ namespace Sabresaurus.EditorNetworking
             if (!knownEndpoints.ContainsKey(endPoint.Address.ToString()))
             {
                 knownEndpoints.Add(endPoint.Address.ToString(), receivedString);
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                 Debug.Log(string.Format("New EndPoint: {0} from {1}", receivedString, endPoint));
 #endif
             }
@@ -152,20 +152,20 @@ namespace Sabresaurus.EditorNetworking
 
                     client.Client.SendTimeout = 5000;
                     client.Client.ReceiveTimeout = 5000;
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                     Debug.Log("Connecting...");
 #endif
                     client.Connect(targetIP, PlayerMessaging.REQUEST_PORT);
 
 
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                     Debug.Log("Connected to player");
 #endif
                 }
 
                 NetworkStream stream = client.GetStream();
 
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                 Debug.Log("Sending request to Player");
 #endif
 
@@ -208,7 +208,7 @@ namespace Sabresaurus.EditorNetworking
                         // Copy in the bytes we've read this frame
                         Array.Copy(networkResponseBuffer, 0, responseBuffer, bytesReadSoFar, count);
 
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                         Debug.Log(string.Format("Response received in editor, length is {0}", count));
 #endif
                         bytesReadSoFar += count;

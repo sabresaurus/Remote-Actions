@@ -1,13 +1,11 @@
 using System;
 using System.IO;
-using System.Text;
-using Sabresaurus.Sidekick.Requests;
-using Sabresaurus.Sidekick.Responses;
-using UnityEngine;
+using Sabresaurus.RemoteActions.Requests;
+using Sabresaurus.RemoteActions.Responses;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
-    public static class SidekickRequestProcessor
+    public static class RequestProcessor
     {
         public static byte[] Process(byte[] input)
         {
@@ -25,7 +23,7 @@ namespace Sabresaurus.Sidekick
                         requestId = br.ReadInt32();
                         requestType = br.ReadString();
 
-                        Type type = typeof(BaseRequest).Assembly.GetType("Sabresaurus.Sidekick.Requests." + requestType);
+                        Type type = typeof(BaseRequest).Assembly.GetType("Sabresaurus.RemoteActions.Requests." + requestType);
 
                         if (type != null && typeof(BaseRequest).IsAssignableFrom(type))
                         {

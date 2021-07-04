@@ -1,7 +1,7 @@
-using Sabresaurus.Sidekick.Responses;
+using Sabresaurus.RemoteActions.Responses;
 using System.IO;
 
-namespace Sabresaurus.Sidekick.Requests
+namespace Sabresaurus.RemoteActions.Requests
 {
     public abstract class BaseRequest
     {

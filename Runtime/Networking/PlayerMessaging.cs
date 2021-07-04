@@ -48,7 +48,7 @@ namespace Sabresaurus.EditorNetworking
 
             tcpListener.Start();
 
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
             Debug.Log(string.Format("The server is running at port " + REQUEST_PORT));
             Debug.Log(string.Format("The local endpoint is: " + tcpListener.LocalEndpoint));
             Debug.Log(string.Format("Waiting for a connection..."));

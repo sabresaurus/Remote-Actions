@@ -1,9 +1,9 @@
 using System;
 
-namespace Sabresaurus.Sidekick
+namespace Sabresaurus.RemoteActions
 {
     [Serializable]
-    public class SidekickNetworkSettings
+    public class RemoteActionsSettings
     {
 #if SIDEKICK_DEBUG
         public bool LocalDevMode = false;
