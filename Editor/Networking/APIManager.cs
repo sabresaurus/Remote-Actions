@@ -1,8 +1,7 @@
 using System;
 using System.IO;
-using Sabresaurus.EditorNetworking;
-using Sabresaurus.Sidekick.Requests;
-using Sabresaurus.Sidekick.Responses;
+using Sabresaurus.RemoteActions.Requests;
+using Sabresaurus.RemoteActions.Responses;
 
 namespace Sabresaurus.RemoteActions
 {
@@ -37,7 +36,7 @@ namespace Sabresaurus.RemoteActions
                     }
                     bytes = ms.ToArray();
                 }
-#if SIDEKICK_DEBUG
+#if REMOTEACTIONS_DEBUG
                 if (settings.LocalDevMode)
                 {
                     byte[] testResponse = SidekickRequestProcessor.Process(bytes);

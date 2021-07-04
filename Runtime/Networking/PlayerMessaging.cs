@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
-namespace Sabresaurus.EditorNetworking
+namespace Sabresaurus.RemoteActions
 {
     public static class PlayerMessaging
     {
