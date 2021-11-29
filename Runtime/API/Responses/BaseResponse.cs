@@ -10,15 +10,11 @@ namespace Sabresaurus.RemoteActions.Responses
 
         public int RequestID
         {
-            get
-            {
-                return requestID;
-            }
+            get { return requestID; }
         }
 
         public BaseResponse()
         {
-
         }
 
         public BaseResponse(BinaryReader br, int requestID)
@@ -27,6 +23,5 @@ namespace Sabresaurus.RemoteActions.Responses
         }
 
         public abstract void Write(BinaryWriter bw);
-
     }
 }

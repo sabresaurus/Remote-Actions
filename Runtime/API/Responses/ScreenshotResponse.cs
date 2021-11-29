@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using JetBrains.Annotations;
 
 namespace Sabresaurus.RemoteActions.Responses
 {
@@ -14,6 +15,7 @@ namespace Sabresaurus.RemoteActions.Responses
             this.pngBytes = pngBytes;
         }
 
+        [UsedImplicitly]
         public ScreenshotResponse(BinaryReader br, int requestID)
             : base(br, requestID)
         {

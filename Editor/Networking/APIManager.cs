@@ -12,6 +12,7 @@ namespace Sabresaurus.RemoteActions
 
         public Action<BaseResponse> ResponseReceived;
 
+        private RemoteActionsSettings Settings => BridgingContext.Instance.container.NetworkSettings;
 
         public int SendToPlayers(BaseRequest request)
         {
@@ -31,11 +32,11 @@ namespace Sabresaurus.RemoteActions
                 bytes = ms.ToArray();
             }
 #if REMOTEACTIONS_DEBUG
-            if (settings.LocalDevMode)
+            if (Settings.LocalDevMode)
             {
-                byte[] testResponse = SidekickRequestProcessor.Process(bytes);
+                byte[] testResponse = RequestProcessor.Process(bytes);
 
-                BaseResponse response = SidekickResponseProcessor.Process(testResponse);
+                BaseResponse response = ResponseProcessor.Process(testResponse);
                 if (ResponseReceived != null)
                     ResponseReceived(response);
             }

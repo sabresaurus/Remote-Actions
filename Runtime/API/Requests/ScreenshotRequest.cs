@@ -1,15 +1,18 @@
 using Sabresaurus.RemoteActions.Responses;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Sabresaurus.RemoteActions.Requests
 {
+    [UsedImplicitly]
     public class ScreenshotRequest : BaseRequest
     {
         public ScreenshotRequest()
         {
         }
 
+        [UsedImplicitly]
         public ScreenshotRequest(BinaryReader br)
         {
         }

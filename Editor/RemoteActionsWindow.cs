@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sabresaurus.RemoteActions.Requests;
 using Sabresaurus.RemoteActions.Responses;
 using UnityEditor;
@@ -14,8 +15,10 @@ namespace Sabresaurus.RemoteActions
         DateTime lastSentHeartbeat = DateTime.MinValue;
         private bool registered;
 
+        private List<CustomDisplay> customDisplays;
+        
         private Texture2D lastTexture = null;
-
+        
         private APIManager APIManager => BridgingContext.Instance.container.APIManager;
 
         private RemoteActionsSettings Settings => BridgingContext.Instance.container.NetworkSettings;
@@ -24,6 +27,18 @@ namespace Sabresaurus.RemoteActions
         {
             APIManager.ResponseReceived -= OnResponseReceived;
             APIManager.ResponseReceived += OnResponseReceived;
+
+            this.titleContent.image = EditorGUIUtility.TrIconContent("PlayButton On").image;
+            
+            customDisplays = new List<CustomDisplay>();
+            var customDisplayTypes = TypeCache.GetTypesDerivedFrom<CustomDisplay>();
+            foreach (var customDisplayType in customDisplayTypes)
+            {
+                if (!customDisplayType.IsAbstract)
+                {
+                    customDisplays.Add((CustomDisplay) Activator.CreateInstance(customDisplayType));
+                }
+            }
         }
 
         [MenuItem("Window/Remote Actions")]
@@ -54,7 +69,14 @@ namespace Sabresaurus.RemoteActions
                     lastTexture.LoadImage(screenshotResponse.PNGBytes);
                 }
 
+                foreach (var customDisplay in customDisplays)
+                {
+                    customDisplay.OnResponseReceived(response);
+                }
+
+#if REMOTEACTIONS_DEBUG
                 Debug.Log("Received response: " + response);
+#endif
             }
 
             Repaint();
@@ -152,10 +174,11 @@ namespace Sabresaurus.RemoteActions
                 TypeCache.TypeCollection requestTypes = TypeCache.GetTypesDerivedFrom<BaseRequest>();
 
                 GUILayout.Label("Actions", EditorStyles.boldLabel);
-                
+
                 foreach (var requestType in requestTypes)
                 {
-                    if (requestType == typeof(HeartbeatRequest))
+                    var customAttributes = requestType.GetCustomAttributes(true);
+                    if (customAttributes.Any(item => item is HideInDefaultListAttribute))
                     {
                         continue;
                     }
@@ -168,16 +191,23 @@ namespace Sabresaurus.RemoteActions
                     }
 
                     displayName = ObjectNames.NicifyVariableName(displayName);
-                    
+
                     if (GUILayout.Button(displayName))
                     {
                         APIManager.SendToPlayers((BaseRequest) Activator.CreateInstance(requestType));
                     }
                 }
 
+                foreach (var customDisplay in customDisplays)
+                {
+                    bool foldout = EditorGUILayout.BeginFoldoutHeaderGroup(true, customDisplay.GetType().Name);
+                    customDisplay.OnGUI();
+                    EditorGUILayout.EndFoldoutHeaderGroup();
+                }
+
                 if (lastTexture != null && lastTexture.width != 2)
                 {
-                    var rect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.currentViewWidth / (lastTexture.width / (float)lastTexture.height));
+                    var rect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.currentViewWidth / (lastTexture.width / (float) lastTexture.height));
                     GUI.DrawTexture(rect, lastTexture, ScaleMode.ScaleToFit);
                 }
             }

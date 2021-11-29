@@ -1,27 +1,22 @@
-﻿using UnityEngine;
-using System.Collections;
 using System.IO;
 using JetBrains.Annotations;
 
 namespace Sabresaurus.RemoteActions.Responses
 {
-    public class HeartbeatResponse : BaseResponse
+    public class SetSettingResponse : BaseResponse
     {
-        public HeartbeatResponse()
+        public SetSettingResponse()
         {
-
         }
 
         [UsedImplicitly]
-        public HeartbeatResponse(BinaryReader br, int requestID)
+        public SetSettingResponse(BinaryReader br, int requestID)
             : base(br, requestID)
         {
-            
         }
 
         public override void Write(BinaryWriter bw)
         {
-            
         }
     }
 }
