@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using System.IO;
+using UnityEngine.Scripting;
 
 namespace Sabresaurus.RemoteActions.Responses
 {
+    [Preserve, RequireDerived] // Prevent code stripping of this and derived types
     public abstract class BaseResponse
     {
         int requestID;

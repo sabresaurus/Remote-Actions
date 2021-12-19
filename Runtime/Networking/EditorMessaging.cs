@@ -20,19 +20,16 @@ namespace Sabresaurus.RemoteActions
      */
     public static class EditorMessaging
     {
-        static Action<byte[]> responseCallback = null;
+        static Action<byte[]> responseCallback;
 
         // ip address to display name mappings
-        static Dictionary<string, string> knownEndpoints = new Dictionary<string, string>()
-        {
-            //{"127.0.0.1", "Local Loopback"}
-        };
+        static Dictionary<string, string> knownEndpoints = new Dictionary<string, string>();
 
 
-        static TcpClient pendingClient = null;
+        static TcpClient pendingClient;
         private static UdpClient receivingUdpClient;
 
-        static int bytesReadSoFar = 0; // For large responses that take more than one frame's read
+        static int bytesReadSoFar; // For large responses that take more than one frame's read
         static byte[] responseBuffer = new byte[0]; // Large responses are filled in over multiple frames
 
         public static Dictionary<string, string> KnownEndpoints
@@ -53,32 +50,14 @@ namespace Sabresaurus.RemoteActions
                 {
                     activeEndpoint = pair.Key;
                 }
+
                 return activeEndpoint;
             }
         }
 
-        public static bool IsConnected
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(EditorMessaging.ConnectedIP);
-            }
-        }
+        public static bool IsConnected => !string.IsNullOrEmpty(ConnectedIP);
 
-
-        public struct UdpState
-        {
-            public UdpClient udpClient;
-            public IPEndPoint endPoint;
-        }
-
-        public static bool Started
-        {
-            get
-            {
-                return receivingUdpClient != null;
-            }
-        }
+        public static bool Started => receivingUdpClient != null;
 
         public static void Start()
         {
@@ -106,7 +85,7 @@ namespace Sabresaurus.RemoteActions
 #if REMOTEACTIONS_DEBUG
             Debug.Log("Listening for player broadcasts");
 #endif
-            udpClient.BeginReceive(new AsyncCallback(ReceivedBroadcastFromPlayer), udpState);
+            udpClient.BeginReceive(ReceivedBroadcastFromPlayer, udpState);
             receivingUdpClient = udpClient;
         }
 
@@ -115,7 +94,7 @@ namespace Sabresaurus.RemoteActions
         /// </summary>
         public static void ReceivedBroadcastFromPlayer(IAsyncResult ar)
         {
-            UdpState udpState = (UdpState)ar.AsyncState;
+            UdpState udpState = (UdpState) ar.AsyncState;
             UdpClient udpClient = udpState.udpClient;
             IPEndPoint endPoint = udpState.endPoint;
 
@@ -126,10 +105,11 @@ namespace Sabresaurus.RemoteActions
             {
                 knownEndpoints.Add(endPoint.Address.ToString(), receivedString);
 #if REMOTEACTIONS_DEBUG
-                Debug.Log(string.Format("New EndPoint: {0} from {1}", receivedString, endPoint));
+                Debug.Log($"New EndPoint: {receivedString} from {endPoint}");
 #endif
             }
-            udpClient.BeginReceive(new AsyncCallback(ReceivedBroadcastFromPlayer), ((UdpState)(ar.AsyncState)));
+
+            udpClient.BeginReceive(ReceivedBroadcastFromPlayer, ((UdpState) (ar.AsyncState)));
         }
 
         public static void SendRequest(byte[] sendingBuffer)
@@ -177,7 +157,7 @@ namespace Sabresaurus.RemoteActions
             catch (SocketException)
             {
                 pendingClient = null;
-                if(knownEndpoints.ContainsKey(targetIP))
+                if (knownEndpoints.ContainsKey(targetIP))
                 {
                     knownEndpoints.Remove(targetIP);
                 }
@@ -196,7 +176,7 @@ namespace Sabresaurus.RemoteActions
                         byte[] networkResponseBuffer = new byte[10000000];
                         var count = stream.Read(networkResponseBuffer, 0, networkResponseBuffer.Length);
 
-                        if(responseBuffer.Length == 0 || bytesReadSoFar == responseBuffer.Length)
+                        if (responseBuffer.Length == 0 || bytesReadSoFar == responseBuffer.Length)
                         {
                             // New response has started, responses start with their full size so first of all create a staging buffer
                             int totalCount = BitConverter.ToInt32(networkResponseBuffer, 0);
@@ -208,12 +188,12 @@ namespace Sabresaurus.RemoteActions
                         Array.Copy(networkResponseBuffer, 0, responseBuffer, bytesReadSoFar, count);
 
 #if REMOTEACTIONS_DEBUG
-                        Debug.Log(string.Format("Response received in editor, length is {0}", count));
+                        Debug.Log($"Response received in editor, length is {count}");
 #endif
                         bytesReadSoFar += count;
 
                         if (bytesReadSoFar >= responseBuffer.Length) // Have we read all the bytes we expected to?
-                        { 
+                        {
                             // Response buffer is full, fire the callback
                             if (responseCallback != null)
                             {
