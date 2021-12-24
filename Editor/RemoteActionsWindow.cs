@@ -142,7 +142,10 @@ namespace Sabresaurus.RemoteActions
 #if REMOTEACTIONS_DEBUG
             validConnection |= Settings.LocalDevMode;
 #endif
-
+            if (GUILayout.Button("foo"))
+            {
+                HTTPServer.SimpleListenerExample(new[] {"https://+:8080/", "http://localhost:8080/"});
+            }
             if (validConnection == false)
             {
                 EditorGUILayout.HelpBox("No player found, make sure both the editor and player are on the same network", MessageType.Warning);
