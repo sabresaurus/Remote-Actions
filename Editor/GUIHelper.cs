@@ -154,5 +154,16 @@ namespace Sabresaurus.RemoteActions
 
             return newValue;
         }
+        
+        public static bool DetectClickInRect(Rect rect, int mouseButton = 0)
+        {
+            if (Event.current.type == EventType.MouseDown && Event.current.button == mouseButton && rect.Contains(Event.current.mousePosition))
+            {
+                Event.current.Use();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

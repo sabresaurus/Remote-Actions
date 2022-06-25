@@ -1,5 +1,4 @@
-﻿using Sabresaurus.RemoteActions.Responses;
-using System.IO;
+﻿using System.IO;
 using JetBrains.Annotations;
 
 namespace Sabresaurus.RemoteActions.Requests
@@ -24,6 +23,26 @@ namespace Sabresaurus.RemoteActions.Requests
         public override BaseResponse GenerateResponse()
         {
             return new HeartbeatResponse();
+        }
+    }
+    
+    public class HeartbeatResponse : BaseResponse
+    {
+        public HeartbeatResponse()
+        {
+
+        }
+
+        [UsedImplicitly]
+        public HeartbeatResponse(BinaryReader br, int requestID)
+            : base(br, requestID)
+        {
+            
+        }
+
+        public override void Write(BinaryWriter bw)
+        {
+            
         }
     }
 }

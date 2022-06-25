@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.IO;
 using Sabresaurus.RemoteActions.Requests;
-using Sabresaurus.RemoteActions.Responses;
 using System;
 
 namespace Sabresaurus.RemoteActions
@@ -31,7 +30,7 @@ namespace Sabresaurus.RemoteActions
             if (requestType.EndsWith("Request", StringComparison.InvariantCulture))
             {
                 string responseType = requestType.Replace("Request", "Response");
-                Type type = typeof(BaseResponse).Assembly.GetType("Sabresaurus.RemoteActions.Responses." + responseType);
+                Type type = typeof(BaseResponse).Assembly.GetType("Sabresaurus.RemoteActions.Requests." + responseType);
                 if (type != null && typeof(BaseResponse).IsAssignableFrom(type))
                 {
                     return (BaseResponse)Activator.CreateInstance(type, br, requestId);

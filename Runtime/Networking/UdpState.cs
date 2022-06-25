@@ -5,7 +5,13 @@ namespace Sabresaurus.RemoteActions
 {
     public struct UdpState
     {
-        public UdpClient udpClient;
-        public IPEndPoint endPoint;
+        public readonly UdpClient udpClient;
+        public readonly IPEndPoint endPoint;
+
+        public UdpState(UdpClient udpClient, IPEndPoint endPoint)
+        {
+            this.udpClient = udpClient;
+            this.endPoint = endPoint;
+        }
     }
 }

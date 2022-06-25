@@ -73,6 +73,33 @@ namespace Sabresaurus.RemoteActions
             // None matched
             return null;
         }
+        
+        public static Type GetSystemTypeFromWrappedDataType(DataType dataType, VariableMetadata metaData, VariableAttributes attributes)
+        {
+            Type elementType = GetSystemTypeFromWrappedDataType(dataType, metaData);
+
+            if (elementType != null)
+            {
+                // if (attributes.HasFlagByte(VariableAttributes.IsArray))
+                // {
+                //     return elementType.MakeArrayType();
+                // }
+                // else if (attributes.HasFlagByte(VariableAttributes.IsList))
+                // {
+                //     Type listType = typeof(List<>);
+                //     return listType.MakeGenericType(elementType);
+                // }
+                // else
+                {
+                    return elementType;
+                }
+            }
+            else
+            {
+                // None matched
+                return null;
+            }
+        }
 
         public static object ReadFromBinary(DataType dataType, BinaryReader br, VariableMetadata metadata)
         {

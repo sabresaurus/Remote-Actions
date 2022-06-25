@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Sabresaurus.RemoteActions.Requests;
-using Sabresaurus.RemoteActions.Responses;
 
 namespace Sabresaurus.RemoteActions
 {

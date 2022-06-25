@@ -21,7 +21,7 @@ namespace Sabresaurus.RemoteActions
         static ReceivedRequestCallback onReceivedRequest = null;
         static TcpListener tcpListener;
         static IAsyncResult pendingAsyncResult = null;
-        public static TcpClient connectedClient;
+        private static TcpClient connectedClient;
 
         static bool listenInProgress = false;
 
@@ -38,7 +38,7 @@ namespace Sabresaurus.RemoteActions
             onReceivedRequest += callback;
         }
 
-        public static void ListenForRequests() // server
+        private static void ListenForRequests() // server
         {
             if (tcpListener != null)
             {
@@ -67,7 +67,7 @@ namespace Sabresaurus.RemoteActions
             listenInProgress = false;
         }
 
-        public static void Broadcast()
+        private static void Broadcast()
         {
 #if !UNITY_EDITOR
             lastUDPBroadcast = DateTime.UtcNow;
@@ -86,7 +86,7 @@ namespace Sabresaurus.RemoteActions
             // TODO: Be good here to track which Editor's got it (if we can)
             //var ServerResponseData = Client.Receive(ref ServerEp);
             //var ServerResponse = Encoding.ASCII.GetString(ServerResponseData);
-            //WriteLine("Recived {0} from {1}", ServerResponse, ServerEp.Address.ToString());
+            //WriteLine("Received {0} from {1}", ServerResponse, ServerEp.Address.ToString());
             udpClient.Close();
         }
 

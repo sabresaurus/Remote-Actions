@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sabresaurus.RemoteActions.Requests;
-using Sabresaurus.RemoteActions.Responses;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,12 +15,11 @@ namespace Sabresaurus.RemoteActions
         private bool registered;
 
         private List<CustomDisplay> customDisplays;
-        
-        private Texture2D lastTexture = null;
-        
+
         private APIManager APIManager => BridgingContext.Instance.container.APIManager;
 
         private RemoteActionsSettings Settings => BridgingContext.Instance.container.NetworkSettings;
+        Vector2 scrollPosition = Vector2.zero;
 
         void OnEnable()
         {
@@ -29,7 +27,7 @@ namespace Sabresaurus.RemoteActions
             APIManager.ResponseReceived += OnResponseReceived;
 
             this.titleContent.image = EditorGUIUtility.TrIconContent("PlayButton On").image;
-            
+
             customDisplays = new List<CustomDisplay>();
             var customDisplayTypes = TypeCache.GetTypesDerivedFrom<CustomDisplay>();
             foreach (var customDisplayType in customDisplayTypes)
@@ -42,7 +40,7 @@ namespace Sabresaurus.RemoteActions
         }
 
         [MenuItem("Window/Remote Actions")]
-        static void Init()
+        public static void OpenWindow()
         {
             // Get existing open window or if none, make a new one:
             GetWindow<RemoteActionsWindow>("Remote Actions");
@@ -63,12 +61,6 @@ namespace Sabresaurus.RemoteActions
         {
             if (!(response is HeartbeatResponse))
             {
-                if (response is ScreenshotResponse screenshotResponse)
-                {
-                    lastTexture = new Texture2D(2, 2);
-                    lastTexture.LoadImage(screenshotResponse.PNGBytes);
-                }
-
                 foreach (var customDisplay in customDisplays)
                 {
                     customDisplay.OnResponseReceived(response);
@@ -128,25 +120,11 @@ namespace Sabresaurus.RemoteActions
             }
         }
 
-
         void OnGUI()
         {
-            GUIStyle centerMessageStyle = new GUIStyle(GUI.skin.label);
-            centerMessageStyle.alignment = TextAnchor.MiddleCenter;
-            centerMessageStyle.wordWrap = true;
-
             GUILayout.Space(9);
 
-            bool validConnection = (EditorMessaging.KnownEndpoints.Count >= 1);
-
-#if REMOTEACTIONS_DEBUG
-            validConnection |= Settings.LocalDevMode;
-#endif
-            if (GUILayout.Button("foo"))
-            {
-                HTTPServer.SimpleListenerExample(new[] {"https://+:8080/", "http://localhost:8080/"});
-            }
-            if (validConnection == false)
+            if (EditorMessaging.HasValidConnection == false)
             {
                 EditorGUILayout.HelpBox("No player found, make sure both the editor and player are on the same network", MessageType.Warning);
             }
@@ -169,11 +147,13 @@ namespace Sabresaurus.RemoteActions
                 EditorGUILayout.Popup(selectionIndex, displayNames.ToArray());
             }
 
+            Settings.AutoRefreshRemote = EditorGUILayout.Toggle("Auto Refresh Remote", Settings.AutoRefreshRemote);
 #if REMOTEACTIONS_DEBUG
             Settings.LocalDevMode = EditorGUILayout.Toggle("Local Dev Mode", Settings.LocalDevMode);
 #endif
-            if (validConnection)
+            if (EditorMessaging.HasValidConnection)
             {
+                scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
                 TypeCache.TypeCollection requestTypes = TypeCache.GetTypesDerivedFrom<BaseRequest>();
 
                 GUILayout.Label("Actions", EditorStyles.boldLabel);
@@ -203,16 +183,15 @@ namespace Sabresaurus.RemoteActions
 
                 foreach (var customDisplay in customDisplays)
                 {
-                    bool foldout = EditorGUILayout.BeginFoldoutHeaderGroup(true, customDisplay.GetType().Name);
+                    EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+                    GUIStyle style = new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter, fontSize = 14, fontStyle = FontStyle.Bold};
+                    GUILayout.Label(customDisplay.GetType().Name, style);
+                    EditorGUILayout.EndHorizontal();
                     customDisplay.OnGUI();
-                    EditorGUILayout.EndFoldoutHeaderGroup();
+                    GUILayout.Space(20);
                 }
 
-                if (lastTexture != null && lastTexture.width != 2)
-                {
-                    var rect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth, EditorGUIUtility.currentViewWidth / (lastTexture.width / (float) lastTexture.height));
-                    GUI.DrawTexture(rect, lastTexture, ScaleMode.ScaleToFit);
-                }
+                EditorGUILayout.EndScrollView();
             }
         }
     }

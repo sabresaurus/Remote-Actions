@@ -6,46 +6,39 @@ namespace Sabresaurus.RemoteActions
 {
     public class SettingsGroup
     {
-        private string groupKey;
-        List<WrappedVariable> fields = new List<WrappedVariable>();
+        public string GroupKey { get; }
 
-        public string GroupKey => groupKey;
-
-        public List<WrappedVariable> Fields => fields;
+        public List<WrappedVariable> Variables { get; } = new List<WrappedVariable>();
 
         public SettingsGroup()
         {
         }
 
-        public SettingsGroup(string groupKey, FieldInfo[] fields, object trackedObject)
+        public SettingsGroup(string groupKey, List<WrappedVariable> variables)
         {
-            this.groupKey = groupKey;
-            this.fields = new List<WrappedVariable>(this.fields.Count);
-            foreach (var fieldInfo in fields)
-            {
-                this.fields.Add(new WrappedVariable(fieldInfo, fieldInfo.GetValue(trackedObject)));
-            }
+            GroupKey = groupKey;
+            Variables = variables;
         }
 
         public SettingsGroup(BinaryReader br)
         {
-            groupKey = br.ReadString();
+            GroupKey = br.ReadString();
 
             int fieldCount = br.ReadInt32();
             for (int i = 0; i < fieldCount; i++)
             {
-                fields.Add(new WrappedVariable(br));
+                Variables.Add(new WrappedVariable(br));
             }
         }
 
         public void Write(BinaryWriter bw)
         {
-            bw.Write(groupKey);
+            bw.Write(GroupKey);
 
-            bw.Write(fields.Count);
-            for (int i = 0; i < fields.Count; i++)
+            bw.Write(Variables.Count);
+            for (int i = 0; i < Variables.Count; i++)
             {
-                fields[i].Write(bw);
+                Variables[i].Write(bw);
             }
         }
     }

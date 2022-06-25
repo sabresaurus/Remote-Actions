@@ -6,22 +6,21 @@ using UnityEngine;
 
 namespace Sabresaurus.RemoteActions
 {
-    public class HTTPServer
+    public static class HTTPServer
     {
+        private const int HTTP_PORT = 10063;
+
         private static HttpListener listener;
         private static Thread listenerThread;
 
         // This example requires the System and System.Net namespaces.
-        public static void SimpleListenerExample(string[] prefixes)
+        public static void Start()
         {
-            // URI prefixes are required,
-            // for example "http://contoso.com:8080/index/".
-            if (prefixes == null || prefixes.Length == 0)
-                throw new ArgumentException("prefixes");
-
             // Create a listener.
             listener = new HttpListener();
+
             // Add the prefixes.
+            string[] prefixes = {$"https://+:{HTTP_PORT}/", $"http://localhost:{HTTP_PORT}/"};
             foreach (string s in prefixes)
             {
                 listener.Prefixes.Add(s);
@@ -66,7 +65,7 @@ namespace Sabresaurus.RemoteActions
             // Obtain a response object.
             HttpListenerResponse response = context.Response;
             // Construct a response.
-            string responseString = "<HTML><BODY> Hello world!" + request.Url.LocalPath + "</BODY></HTML>";
+            string responseString = "<html><body>Hello world!<br />" + request.Url.LocalPath + "</body></html>";
             byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;

@@ -1,6 +1,6 @@
 using System.IO;
+using System.Reflection;
 using JetBrains.Annotations;
-using Sabresaurus.RemoteActions.Responses;
 
 namespace Sabresaurus.RemoteActions.Requests
 {
@@ -33,16 +33,42 @@ namespace Sabresaurus.RemoteActions.Requests
 
         public override BaseResponse GenerateResponse()
         {
-            var matchedObject = ObjectTracker.GetObject(groupKey);
+            var matchedObject = SettingsObjectTracker.GetObject(groupKey);
 
             if (matchedObject != null)
             {
-                var fieldInfo = matchedObject.GetType().GetField(wrappedVariable.VariableName);
-
-                fieldInfo.SetValue(matchedObject, wrappedVariable.Value);
+                FieldInfo fieldInfo = matchedObject.GetType().GetField(wrappedVariable.VariableName);
+                
+                if(fieldInfo != null)
+                {
+                    fieldInfo.SetValue(matchedObject, wrappedVariable.Value);
+                }
+                
+                PropertyInfo propertyInfo = matchedObject.GetType().GetProperty(wrappedVariable.VariableName);
+                
+                if(propertyInfo != null && propertyInfo.GetSetMethod() != null)
+                {
+                    propertyInfo.SetValue(matchedObject, wrappedVariable.Value);
+                }
             }
 
             return new SetSettingResponse();
+        }
+    }
+    public class SetSettingResponse : BaseResponse
+    {
+        public SetSettingResponse()
+        {
+        }
+
+        [UsedImplicitly]
+        public SetSettingResponse(BinaryReader br, int requestID)
+            : base(br, requestID)
+        {
+        }
+
+        public override void Write(BinaryWriter bw)
+        {
         }
     }
 }

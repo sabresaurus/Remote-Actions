@@ -3,8 +3,8 @@
 namespace Sabresaurus.RemoteActions
 {
     /// <summary>
-    /// Required for RemoteActions to connect to a remote. This class is included in builds and auto-instantiates
-    /// when the game starts.
+    /// Required for RemoteActions to connect to a remote. This class is included in development builds and
+    /// auto-instantiates when the game starts.
     /// </summary>
     public class RuntimeRemoteActionsBridge : MonoBehaviour
     {
@@ -25,6 +25,7 @@ namespace Sabresaurus.RemoteActions
         {
             PlayerMessaging.Start();
             PlayerMessaging.RegisterForRequests(OnRequestReceived);
+            // HTTPServer.Start();
         }
 
         void Update()
