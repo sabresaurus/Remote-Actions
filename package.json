@@ -1,6 +1,6 @@
 {
     "name": "com.sabresaurus.remoteactions",
-    "version": "1.0.0-preview.1",
+    "version": "1.0.0-preview.2",
     "displayName": "Remote Actions",
     "description": "Call custom code snippets in deployed Unity builds",
     "unity": "2020.3",
